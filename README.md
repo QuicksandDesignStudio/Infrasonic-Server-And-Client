@@ -1,3 +1,3 @@
 # real-time-serial-fft
 
-FFT viz with python example in Python-WAV-FFT-Example-Code
+FFT visualisation with python example in _Python-WAV-FFT-Example-Code_ folder
