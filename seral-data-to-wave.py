@@ -1,3 +1,6 @@
+# eventually we should not need to store a wav at all, we should be able to directly do FFT with the data
+# this is only a temp step
+
 import serial
 import wave
 import struct
