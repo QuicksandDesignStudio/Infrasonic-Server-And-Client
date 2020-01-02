@@ -18,7 +18,7 @@ wavef.setnchannels(1)  # mono
 wavef.setsampwidth(2)
 wavef.setframerate(sampleRate)
 
-ser = serial.Serial('/dev/tty.usbserial-1460')
+ser = serial.Serial('/dev/tty.usbserial-1440')
 ser.flushInput()
 
 
