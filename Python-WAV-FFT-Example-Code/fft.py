@@ -6,12 +6,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 fs_rate, signal = wavfile.read("test17.wav")
+print(signal)
 print("Frequency sampling", fs_rate)
 l_audio = len(signal.shape)
 print("Channels", l_audio)
 if l_audio == 2:
     signal = signal.sum(axis=1) / 2
 N = signal.shape[0]
+print("N : " + N)
 print("Complete Samplings N", N)
 secs = N / float(fs_rate)
 print("secs", secs)
