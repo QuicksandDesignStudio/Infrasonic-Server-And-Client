@@ -109,7 +109,6 @@ def animate(i):
 
 fig = plt.figure()
 ax1 = fig.add_subplot(1, 1, 1)
-ax2 = fig.add_subplot(1, 1, 1)
 xs = []
 ys = []
 
