@@ -54,6 +54,8 @@ class serialPlot:
         self.previousTimer = currentTimer
         # use 'h' for a 2 byte integer
         value,  = struct.unpack('f', self.rawData)
+        print(self.rawData)
+        print(value)
         # we get the latest data point and append it to our array
         self.data.append(value)
         nvalues = np.array(self.data)
@@ -82,7 +84,7 @@ def animate(i):
     global baudRate
 
     signal = s.getSerialData()
-    print(signal)
+    # print(signal)
 
     fs_rate = baudRate
     l_audio = len(signal.shape)
@@ -114,7 +116,7 @@ ys = []
 
 # portName = 'COM5'     # for windows users
 portName = '/dev/tty.usbserial-1460'
-baudRate = 38400
+baudRate = 9600
 maxPlotLength = 100
 dataNumBytes = 4        # number of bytes of 1 data point
 

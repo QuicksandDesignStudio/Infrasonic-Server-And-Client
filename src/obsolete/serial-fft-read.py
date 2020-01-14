@@ -10,10 +10,11 @@ from matplotlib.colors import LogNorm
 import matplotlib.animation as animation
 import time
 from scipy.io.wavfile import write
+import serial as sl
 
 THRESHOLD = 0  # dB
-RATE = 44100
-INPUT_BLOCK_TIME = 1  # 30 ms
+RATE = 57600
+INPUT_BLOCK_TIME = 0.1  # 30 ms
 INPUT_FRAMES_PER_BLOCK = int(RATE * INPUT_BLOCK_TIME)
 INPUT_FRAMES_PER_BLOCK_BUFFER = int(RATE * INPUT_BLOCK_TIME)
 
@@ -71,7 +72,8 @@ class AudioHandler(object):
         return stream
 
     def processBlock(self, snd_block):
-        fs_rate = self.rate
+        print(snd_block)
+        fs_rate = self.rate * 0.1
         l_audio = len(snd_block.shape)
         print(l_audio)
         print(print("Channels", l_audio))
@@ -106,13 +108,22 @@ class AudioHandler(object):
         plt.show()
 
     def listen(self):
-        try:
-            print("start", self.stream.is_active(), self.stream.is_stopped())
-            # raw_block = self.stream.read(INPUT_FRAMES_PER_BLOCK, exception_on_overflow = False)
+        # try:
+        print("start", self.stream.is_active(), self.stream.is_stopped())
+        # raw_block = self.stream.read(INPUT_FRAMES_PER_BLOCK, exception_on_overflow = False)
 
-            total = 0
-            t_snd_block = []
-            while total < INPUT_FRAMES_PER_BLOCK:
+        total = 0
+        t_snd_block = []
+        while total < INPUT_FRAMES_PER_BLOCK:
+            print(total)
+            try:
+                data1 = ser.readline()
+                intData = int(data1)
+                count = len(data1) / 2
+                total = total + count
+                format = '%dh' % (count)
+                t_snd_block.append(intData)
+                """
                 while self.stream.get_read_available() <= 0:
                     # print('waiting')
                     time.sleep(0.01)
@@ -125,10 +136,14 @@ class AudioHandler(object):
                     format = '%dh' % (count)
                     t_snd_block.append(np.fromstring(
                         raw_block, dtype=np.int16))
-            snd_block = np.hstack(t_snd_block)
-        except Exception as e:
-            print('Error recording: {}'.format(e))
-            return
+                """
+            except:
+                pass
+        snd_block = np.hstack(t_snd_block)
+        # except Exception as e:
+        #     print(e)
+        #     print('Error recording: {}'.format(e))
+        #     return
 
         self.processBlock(snd_block)
 
@@ -139,5 +154,6 @@ def animate(i):
 
 if __name__ == '__main__':
     audio = AudioHandler(RATE)
+    ser = sl.Serial('/dev/tty.usbserial-1450', 57600)
     for i in range(0, 1000):
         audio.listen()
