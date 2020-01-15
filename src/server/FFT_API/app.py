@@ -33,5 +33,10 @@ def make_wave():
     return "File Saved!"
 
 
+@app.route('/fft/api/v1.0/make_wave', methods=['POST'])
+def do_fft():
+    return "this method is pending"
+
+
 if __name__ == '__main__':
     app.run(debug=True)
