@@ -17,8 +17,8 @@ duration = 4
 counter = 0
 sample_rate = 1000
 
-wavef = wave.open(sys.argv[0], 'w')
-print(sys.argv[0])
+
+wavef = wave.open(sys.argv[1], 'w')
 wavef.setnchannels(1)  # mono
 wavef.setsampwidth(2)
 wavef.setframerate(sample_rate)
@@ -30,7 +30,6 @@ while(counter < (duration * sample_rate)):
         value = ser.readline()
 
         intData = int(value)
-        # print(intData)
         data = struct.pack('<h', intData)
         wavef.writeframesraw(data)
         counter += 1
