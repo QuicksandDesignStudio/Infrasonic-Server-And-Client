@@ -14,31 +14,43 @@ API_ENDPOINT_DOFFTSAMPLE = "http://localhost:5000/fft/api/v1.0/do_fft_from_sampl
 
 
 def main():
-    if(sys.argv[1] == "getwaves"):
-        r = requests.get(url=API_ENDPOINT_GETWAV)
-        allWaves = json.loads(r.text)
-        print(allWaves)
+    argument = True
 
-    elif(sys.argv[1] == "getFFT"):
-        payload = 'gube.wav'
-        r = requests.post(url=API_ENDPOINT_DOFFT, data=payload)
-        returnLoad = json.loads(r.text)
-        plotfft(returnLoad)
+    # check if there was a user input
+    try:
+        sys.argv[1]
+    except:
+        argument = False
 
-    elif(sys.argv[1] == "getFFTsample"):
-        f = open("samples/sample.txt")
-        payload = {'sampling_rate': '1100', 'samples': f.read()}
-        r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
-                          data=json.dumps(payload))
-        returnLoad = json.loads(r.text)
-        plotfft(returnLoad)
-
+    if(argument == False):
+        print("This script requires a user input \nTry getwaves, getFFT, getFFTsample or makewave")
     else:
-        f = open("samples/sample.txt")
-        payload = {'file_name': 'gube.wav',
-                   'sampling_rate': '1100', 'samples': f.read()}
-        r = requests.post(url=API_ENDPOINT_MAKEWAV, data=json.dumps(payload))
-        print(r.text)
+        if(sys.argv[1] == "getwaves"):
+            r = requests.get(url=API_ENDPOINT_GETWAV)
+            allWaves = json.loads(r.text)
+            print(allWaves)
+
+        elif(sys.argv[1] == "getFFT"):
+            payload = 'gube.wav'
+            r = requests.post(url=API_ENDPOINT_DOFFT, data=payload)
+            returnLoad = json.loads(r.text)
+            plotfft(returnLoad)
+
+        elif(sys.argv[1] == "getFFTsample"):
+            f = open("samples/sample.txt")
+            payload = {'sampling_rate': '1100', 'samples': f.read()}
+            r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
+                              data=json.dumps(payload))
+            returnLoad = json.loads(r.text)
+            plotfft(returnLoad)
+
+        elif(sys.argv[1] == "makewave"):
+            f = open("samples/sample.txt")
+            payload = {'file_name': 'gube.wav',
+                       'sampling_rate': '1100', 'samples': f.read()}
+            r = requests.post(url=API_ENDPOINT_MAKEWAV,
+                              data=json.dumps(payload))
+            print(r.text)
 
 
 def plotfft(fftdata):
