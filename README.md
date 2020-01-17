@@ -1,6 +1,7 @@
 # real-time-serial-fft
-
-FFT visualisation with python example in _Python-WAV-FFT-Example-Code_ folder
+Python API to 
+1. Make wave files from signal samples
+2. Conduct FFT analysis on wave files as well as signal samples directly
 
 __Note__
 
