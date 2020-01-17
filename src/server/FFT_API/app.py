@@ -18,13 +18,17 @@ import scipy.fftpack
 
 import numpy as np
 
-
+# instantiate Flask and set full CORS accessibility - we don't have security concerns
 app = Flask(__name__)
 CORS(app)
 
+# path to where the created .wav files are stored
 wavePath = "waves"
 
-
+"""
+>> Hook to make a wave with sensor samples
+>> This is a POST method that takes in sensor samples and responds with a success message - File Saved!
+"""
 @app.route('/fft/api/v1.0/make_wave', methods=['POST'])
 def make_wave():
     payload = json.loads(request.get_data().decode('utf8').replace("'", '"'))
@@ -46,6 +50,10 @@ def make_wave():
     return "File Saved!"
 
 
+"""
+>> Hook to list all the waves that are stored on the server
+>> This is a GET method that takes in no arguments and returns a json dump of all the wave files that are in the server
+"""
 @app.route('/fft/api/v1.0/get_wave', methods=['GET'])
 def get_wave():
     allSamples = [f for f in listdir(
@@ -53,6 +61,18 @@ def get_wave():
     return json.dumps(allSamples)
 
 
+"""
+>> Hook to list conduct FFT analysis on a wav file on the server
+>> This is a POST method that takes in the name of a wav file (in the server) and returns FFT analysis 
+
+Return Details 
+1. timeVector -> the time stamps against the signal samples 
+2. signal -> the sensor values at the sampling rate
+3. fullPhaseFrequencies -> list of FFT frequencies across the full phase
+4. fullPhaseFFT -> amplitude of frequencies across the full phase
+5. positiveFrequencies -> list of FFT frequencies across the positive phase
+6. positiveFFT -> amplitude of frequencies across the positive phase
+"""
 @app.route('/fft/api/v1.0/do_fft', methods=['POST'])
 def do_fft():
     print("Doing FFT with a wave")
@@ -88,6 +108,18 @@ def do_fft():
     return json.dumps(returnLoad)
 
 
+"""
+>> Hook to list conduct FFT analysis on a sample
+>> This is a POST method that takes in sensor samples and returns FFT analysis 
+
+Return Details 
+1. timeVector -> the time stamps against the signal samples 
+2. signal -> the sensor values at the sampling rate
+3. fullPhaseFrequencies -> list of FFT frequencies across the full phase
+4. fullPhaseFFT -> amplitude of frequencies across the full phase
+5. positiveFrequencies -> list of FFT frequencies across the positive phase
+6. positiveFFT -> amplitude of frequencies across the positive phase
+"""
 @app.route('/fft/api/v1.0/do_fft_from_sample', methods=['POST'])
 def do_fft_from_sample():
     print("Doing FFT with a sample")
