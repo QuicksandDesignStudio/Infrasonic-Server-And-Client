@@ -10,6 +10,7 @@ samplePath = "samples"
 API_ENDPOINT_MAKEWAV = "http://localhost:5000/fft/api/v1.0/make_wave"
 API_ENDPOINT_GETWAV = "http://localhost:5000/fft/api/v1.0/get_wave"
 API_ENDPOINT_DOFFT = "http://localhost:5000/fft/api/v1.0/do_fft"
+API_ENDPOINT_DOFFTSAMPLE = "http://localhost:5000/fft/api/v1.0/do_fft_from_sample"
 
 
 def main():
@@ -17,9 +18,18 @@ def main():
         r = requests.get(url=API_ENDPOINT_GETWAV)
         allWaves = json.loads(r.text)
         print(allWaves)
+
     elif(sys.argv[1] == "getFFT"):
-        payload = '400HZ.wav'
+        payload = 'gube.wav'
         r = requests.post(url=API_ENDPOINT_DOFFT, data=payload)
+        returnLoad = json.loads(r.text)
+        plotfft(returnLoad)
+
+    elif(sys.argv[1] == "getFFTsample"):
+        f = open("samples/sample.txt")
+        payload = {'sampling_rate': '1100', 'samples': f.read()}
+        r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
+                          data=json.dumps(payload))
         returnLoad = json.loads(r.text)
         plotfft(returnLoad)
 
