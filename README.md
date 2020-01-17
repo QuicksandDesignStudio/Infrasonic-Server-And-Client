@@ -5,7 +5,6 @@ __Python API__ that does the following:
 2. Conduct FFT analysis on wave files as well as signal samples directly
 
 __Note__
-
 For the Flask server here - src/server/FFT_API/ you will need to install dependencies as it was setup as a virtual environment Flask server
 
 Bascially set up a virual environment - python 3 - and then pip install the following libraries before running app.py
