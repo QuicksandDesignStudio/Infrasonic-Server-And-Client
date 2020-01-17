@@ -2,7 +2,11 @@
 
 FFT visualisation with python example in _Python-WAV-FFT-Example-Code_ folder
 
-*Note*
+__Note__
 For the Flask server here - src/server/FFT_API/ you will need to install dependencies as it was setup as a virtual environment Flask server
 
-Bascially set up a virual environment - python 3 and then pip install the following libraries flask, flask-cors, scipi and numpy before running app.py
+Bascially set up a virual environment - python 3 - and then pip install the following libraries before running app.py
+-flask
+-flask-cors
+-scipi
+-numpy 
