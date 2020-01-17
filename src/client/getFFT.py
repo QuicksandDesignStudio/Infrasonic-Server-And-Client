@@ -29,6 +29,7 @@ def main():
             r = requests.get(url=API_ENDPOINT_GETWAV)
             allWaves = json.loads(r.text)
             print(allWaves)
+            # print(allWaves[0])
 
         elif(sys.argv[1] == "getFFT"):
             payload = 'gube.wav'
