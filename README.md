@@ -1,5 +1,6 @@
 # real-time-serial-fft
-Python API to 
+
+__Python API__ that does the following:
 1. Make wave files from signal samples
 2. Conduct FFT analysis on wave files as well as signal samples directly
 
