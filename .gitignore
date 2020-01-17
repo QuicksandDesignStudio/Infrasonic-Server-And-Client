@@ -11,5 +11,4 @@ Thumbs.db
 .Trashes
 
 #remove server dependencies - python libraries
-src/server/lib
-src/server/include
+src/server/FFT_API/lib
