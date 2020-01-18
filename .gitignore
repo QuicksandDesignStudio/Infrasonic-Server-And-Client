@@ -12,3 +12,4 @@ Thumbs.db
 
 #remove server dependencies - python libraries
 src/server/FFT_API/lib
+src/server/FFT_API/waves

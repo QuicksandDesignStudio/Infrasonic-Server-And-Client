@@ -32,7 +32,7 @@ def main():
             # print(allWaves[0])
 
         elif(sys.argv[1] == "getFFT"):
-            payload = 'gube.wav'
+            payload = sys.argv[2]
             r = requests.post(url=API_ENDPOINT_DOFFT, data=payload)
             returnLoad = json.loads(r.text)
             plotfft(returnLoad)
@@ -62,10 +62,19 @@ def plotfft(fftdata):
     positiveFrequencies = np.array(fftdata["positiveFrequencies"])
     positiveFFT = np.array(fftdata["positiveFFT"])
 
+    # remove random spike
+    positiveFFT[0] = 0
+    fullPhaseFFT[0] = 0
+
     # plotting the signal
     plt.subplot(311)
     p1 = plt.plot(timeVector, signal, "g")
-    plt.xlabel('Time')
+    try:
+        sys.argv[2]
+        plt.title(sys.argv[2])
+    except:
+        plt.xlabel('Time')
+
     plt.ylabel('Amplitude')
 
     # plotting the complete fft spectrum
@@ -79,6 +88,7 @@ def plotfft(fftdata):
     p3 = plt.plot(positiveFrequencies, positiveFFT, "b")
     plt.xlabel('Frequency (Hz)')
     plt.ylabel('Count single-sided')
+
     plt.show()
 
 

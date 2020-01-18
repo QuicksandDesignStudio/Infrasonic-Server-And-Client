@@ -15,7 +15,7 @@ import sys
 
 duration = 4
 counter = 0
-sample_rate = 1000
+sample_rate = 2000
 
 
 wavef = wave.open(sys.argv[1], 'w')
@@ -23,7 +23,7 @@ wavef.setnchannels(1)  # mono
 wavef.setsampwidth(2)
 wavef.setframerate(sample_rate)
 
-ser = sl.Serial('/dev/tty.usbserial-1410', 57600)
+ser = sl.Serial('/dev/tty.SLAB_USBtoUART', 250000)
 
 while(counter < (duration * sample_rate)):
     try:
