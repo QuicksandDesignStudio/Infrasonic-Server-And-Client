@@ -4,6 +4,7 @@ import requests
 import json
 import sys
 import numpy as np
+import time
 from matplotlib import pyplot as plt
 
 samplePath = "samples"
@@ -11,6 +12,8 @@ API_ENDPOINT_MAKEWAV = "http://localhost:5000/fft/api/v1.0/make_wave"
 API_ENDPOINT_GETWAV = "http://localhost:5000/fft/api/v1.0/get_wave"
 API_ENDPOINT_DOFFT = "http://localhost:5000/fft/api/v1.0/do_fft"
 API_ENDPOINT_DOFFTSAMPLE = "http://localhost:5000/fft/api/v1.0/do_fft_from_sample"
+API_ENDPOINT_ESP_GETALLSAMPLES = "http://192.168.4.1/list"
+API_ENDPOINT_ESP = "http://192.168.4.1/"
 
 
 def main():
@@ -38,7 +41,7 @@ def main():
             plotfft(returnLoad)
 
         elif(sys.argv[1] == "getFFTsample"):
-            f = open("samples/sample.txt")
+            f = open("samples/"+sys.argv[2])
             payload = {'sampling_rate': '1100', 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
                               data=json.dumps(payload))
@@ -46,12 +49,22 @@ def main():
             plotfft(returnLoad)
 
         elif(sys.argv[1] == "makewave"):
-            f = open("samples/sample.txt")
+            f = open("samples/"+sys.argv[2])
             payload = {'file_name': 'gube.wav',
                        'sampling_rate': '1100', 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_MAKEWAV,
                               data=json.dumps(payload))
             print(r.text)
+
+        elif(sys.argv[1] == "getsamples"):
+            r = requests.get(url=API_ENDPOINT_ESP_GETALLSAMPLES)
+            allsamples = json.loads(r.text)
+            saveallsamples(allsamples)
+
+        elif(sys.argv[1] == "listlocalsamples"):
+            allSamples = [f for f in listdir(
+                samplePath) if isfile(join(samplePath, f))]
+            print(allSamples)
 
 
 def plotfft(fftdata):
@@ -90,6 +103,22 @@ def plotfft(fftdata):
     plt.ylabel('Count single-sided')
 
     plt.show()
+
+
+def saveallsamples(allsamples):
+    for entry in allsamples:
+        r = requests.get(url=API_ENDPOINT_ESP+entry["name"])
+        returnload = json.loads(r.text)
+        sample = returnload["data"]
+        fileName = "samples/" + str(time.time()) + ".txt"
+        with open(fileName, 'w') as f:
+            counter = 0
+            for item in sample:
+                if(counter == len(sample) - 1):
+                    f.write(str(item))
+                else:
+                    f.write(str(item)+",")
+                counter += 1
 
 
 if __name__ == "__main__":
