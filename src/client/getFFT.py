@@ -12,8 +12,9 @@ API_ENDPOINT_MAKEWAV = "http://localhost:5000/fft/api/v1.0/make_wave"
 API_ENDPOINT_GETWAV = "http://localhost:5000/fft/api/v1.0/get_wave"
 API_ENDPOINT_DOFFT = "http://localhost:5000/fft/api/v1.0/do_fft"
 API_ENDPOINT_DOFFTSAMPLE = "http://localhost:5000/fft/api/v1.0/do_fft_from_sample"
-API_ENDPOINT_ESP_GETALLSAMPLES = "http://192.168.4.1/list"
 API_ENDPOINT_ESP = "http://192.168.4.1/"
+API_ENDPOINT_ESP_GETALLSAMPLES = API_ENDPOINT_ESP + "list"
+API_ENDPOINT_ESP_DELETESAMPLE = API_ENDPOINT_ESP + "delete"
 
 
 def main():
@@ -42,7 +43,7 @@ def main():
 
         elif(sys.argv[1] == "getFFTsample"):
             f = open("samples/"+sys.argv[2])
-            payload = {'sampling_rate': '1100', 'samples': f.read()}
+            payload = {'sampling_rate': '1830', 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
                               data=json.dumps(payload))
             returnLoad = json.loads(r.text)
@@ -50,8 +51,8 @@ def main():
 
         elif(sys.argv[1] == "makewave"):
             f = open("samples/"+sys.argv[2])
-            payload = {'file_name': 'gube.wav',
-                       'sampling_rate': '1100', 'samples': f.read()}
+            payload = {'file_name': 'gube1.wav',
+                       'sampling_rate': '1830', 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_MAKEWAV,
                               data=json.dumps(payload))
             print(r.text)
@@ -64,7 +65,19 @@ def main():
         elif(sys.argv[1] == "listlocalsamples"):
             allSamples = [f for f in listdir(
                 samplePath) if isfile(join(samplePath, f))]
-            print(allSamples)
+            for i in allSamples:
+                if(i != ".DS_Store"):
+                    print(i)
+
+        elif(sys.argv[1] == "listremotesamples"):
+            r = requests.get(url=API_ENDPOINT_ESP_GETALLSAMPLES)
+            allsamples = json.loads(r.text)
+            for entry in allsamples:
+                print(entry["name"])
+
+        elif(sys.argv[1] == "deletesample"):
+            r = requests.get(url=API_ENDPOINT_ESP_DELETESAMPLE+"?"+sys.argv[2])
+            print(r.text)
 
 
 def plotfft(fftdata):
@@ -108,9 +121,27 @@ def plotfft(fftdata):
 def saveallsamples(allsamples):
     for entry in allsamples:
         r = requests.get(url=API_ENDPOINT_ESP+entry["name"])
+        returnLoad = r.text
+        sample = returnLoad[:-1]
+        fileName = "samples/" + entry["name"] + ".txt"
+        sampleBroken = sample.split(",")
+        sampleBroken = [int(numeric_string)
+                        for numeric_string in sampleBroken]
+        filteredSample = ""
+        for i in sampleBroken:
+            if(i < 1900 and i > 1200):
+                filteredSample += str(i) + ","
+            else:
+                filteredSample += str(int(Average(sampleBroken))) + ","
+        filteredSample = filteredSample[:-1]
+        with open(fileName, 'w') as f:
+            print(fileName)
+            f.write(filteredSample)
+        """
         returnload = json.loads(r.text)
         sample = returnload["data"]
-        fileName = "samples/" + str(time.time()) + ".txt"
+        fileName = "samples/" + entry["name"] + ".txt"
+        print(fileName)
         with open(fileName, 'w') as f:
             counter = 0
             for item in sample:
@@ -119,6 +150,11 @@ def saveallsamples(allsamples):
                 else:
                     f.write(str(item)+",")
                 counter += 1
+        """
+
+
+def Average(lst):
+    return sum(lst) / len(lst)
 
 
 if __name__ == "__main__":

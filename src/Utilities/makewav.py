@@ -23,7 +23,7 @@ wavef.setnchannels(1)  # mono
 wavef.setsampwidth(2)
 wavef.setframerate(sample_rate)
 
-ser = sl.Serial('/dev/tty.SLAB_USBtoUART', 250000)
+ser = sl.Serial('/dev/tty.SLAB_USBtoUART', 115200)
 
 while(counter < (duration * sample_rate)):
     try:
