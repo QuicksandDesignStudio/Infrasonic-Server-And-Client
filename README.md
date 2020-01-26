@@ -2,7 +2,8 @@
 
 This Repo has three components
 
-#1. Flask Server - With the Following API Hooks#  
+# 1. Flask Server - With the Following API Hooks
+
 _For instructions on how to use these methods please look at the documented code in app.py_
 
 1. /fft/api/v1.0/make_wave  
@@ -18,7 +19,8 @@ _For instructions on how to use these methods please look at the documented code
 4. /fft/api/v1.0/do_fft_from_sample  
    POST - Do an FFT analysis with raw sample data sent to the server as post
 
-**2. Client API - With the following Hooks**  
+# 2. Client API - With the following Hooks
+
 _For instructions on how to use these methods please look at the documented code in getFFT.py. The simple HTTP requests and some drawing methods in getFFT.py are for illustration purposes. Feel free to rewrite these in any environment that may be relevant. It should be very easy to port._
 
 1. getwaves  
@@ -49,3 +51,14 @@ _The hooks below are a) some helper hooks for local file handling and b) interfa
 
 9. deleteallsamples  
    _Delete all samples from the ESP32 server_
+
+# 3. Utilities
+
+1. create-wave-sin.py  
+   _Create a sine wave_
+
+2. list-ports.py  
+   _List all ports on your device - useful to find the name of the port to which an ADC device/Microcontroller is connected to_
+
+3. makewave.py  
+   _Sample data from an ADC device or a Microcontroller for a fixed duration and convert that into a wave file (.wav)_
