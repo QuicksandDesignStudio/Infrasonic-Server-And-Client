@@ -1,15 +1,19 @@
 # Infrsonic Server And Client
 
-__Python API__ that does the following:
-1. Make wave files from signal samples
-2. Conduct FFT analysis on wave files as well as signal samples directly
+This Repo has three components
 
-__Note__
+**Flask Server - With the Following APIs**
+_For instructions on how to use these methods please look at the documented code in app.py_
 
-For the Flask server here - src/server/FFT_API/ you will need to install dependencies as it was setup as a virtual environment Flask server
+1. /fft/api/v1.0/make_wave
+   POST - Make a wave (.wav) from raw sound sensor (mic) samples
 
-Bascially set up a virual environment - python 3 - and then pip install the following libraries before running app.py
-1. flask
-2. flask-cors
-3. scipi
-4. numpy 
+2. /fft/api/v1.0/get_wave
+   GET - Get names of all the waves on the server
+
+3. /fft/api/v1.0/do*fft
+   POST - Do an FFT analysis with a wave already on the server.
+   *For details on the returned FFT object, please look at hte documented code in app.py\*
+
+4. /fft/api/v1.0/do_fft_from_sample
+   POST - Do an FFT analysis with raw sample data sent to the server as post
