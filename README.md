@@ -1,4 +1,4 @@
-# real-time-serial-fft
+# Infrsonic Server And Client
 
 __Python API__ that does the following:
 1. Make wave files from signal samples
