@@ -8,17 +8,17 @@ _For instructions on how to use these methods please look at the documented code
 _Please note that the flask server dependencies are not included in the repo. The best way to handle this is to create a virutal environment (python3), install the dependencies with pip (look at the includes in app.py to figure what needs to the installed) and then use app.py_
 
 1. /fft/api/v1.0/make*wave  
-   \_POST - Make a wave (.wav) from raw sound sensor (mic) samples*
+   _POST - Make a wave (.wav) from raw sound sensor (mic) samples_
 
 2. /fft/api/v1.0/get*wave  
-   \_GET - Get names of all the waves on the server*
+   _GET - Get names of all the waves on the server_
 
 3. /fft/api/v1.0/dofft  
    _POST - Do an FFT analysis with a wave already on the server._  
    _For details on the returned FFT object, please look at hte documented code in app.py_
 
 4. /fft/api/v1.0/do*fft_from_sample  
-   \_POST - Do an FFT analysis with raw sample data sent to the server as post*
+   _POST - Do an FFT analysis with raw sample data sent to the server as post_
 
 # 2. Client API - With the following Hooks
 
