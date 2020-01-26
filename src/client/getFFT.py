@@ -8,6 +8,7 @@ import time
 from matplotlib import pyplot as plt
 
 samplePath = "samples"
+analogSampleRate = '1950'
 API_ENDPOINT_MAKEWAV = "http://localhost:5000/fft/api/v1.0/make_wave"
 API_ENDPOINT_GETWAV = "http://localhost:5000/fft/api/v1.0/get_wave"
 API_ENDPOINT_DOFFT = "http://localhost:5000/fft/api/v1.0/do_fft"
@@ -43,7 +44,7 @@ def main():
 
         elif(sys.argv[1] == "getFFTsample"):
             f = open("samples/"+sys.argv[2])
-            payload = {'sampling_rate': '1830', 'samples': f.read()}
+            payload = {'sampling_rate': analogSampleRate, 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
                               data=json.dumps(payload))
             returnLoad = json.loads(r.text)
@@ -51,8 +52,8 @@ def main():
 
         elif(sys.argv[1] == "makewave"):
             f = open("samples/"+sys.argv[2])
-            payload = {'file_name': 'gube1.wav',
-                       'sampling_rate': '1830', 'samples': f.read()}
+            payload = {'file_name': sys.argv[3],
+                       'sampling_rate': analogSampleRate, 'samples': f.read()}
             r = requests.post(url=API_ENDPOINT_MAKEWAV,
                               data=json.dumps(payload))
             print(r.text)
@@ -76,8 +77,13 @@ def main():
                 print(entry["name"])
 
         elif(sys.argv[1] == "deletesample"):
-            r = requests.get(url=API_ENDPOINT_ESP_DELETESAMPLE+"?"+sys.argv[2])
+            r = requests.get(
+                url=API_ENDPOINT_ESP_DELETESAMPLE+"?path=/"+sys.argv[2])
             print(r.text)
+        elif(sys.argv[1] == "deleteallsamples"):
+            r = requests.get(url=API_ENDPOINT_ESP_GETALLSAMPLES)
+            allsamples = json.loads(r.text)
+            deleteallsamples(allsamples)
 
 
 def plotfft(fftdata):
@@ -151,6 +157,13 @@ def saveallsamples(allsamples):
                     f.write(str(item)+",")
                 counter += 1
         """
+
+
+def deleteallsamples(allsamples):
+    for entry in allsamples:
+        r = requests.get(url=API_ENDPOINT_ESP_DELETESAMPLE +
+                         "?path=/"+entry["name"])
+        print(r.text)
 
 
 def Average(lst):
