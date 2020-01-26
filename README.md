@@ -2,7 +2,7 @@
 
 This Repo has three components
 
-**1. Flask Server - With the Following API Hooks**  
+#1. Flask Server - With the Following API Hooks#  
 _For instructions on how to use these methods please look at the documented code in app.py_
 
 1. /fft/api/v1.0/make_wave  
@@ -18,7 +18,7 @@ _For instructions on how to use these methods please look at the documented code
 4. /fft/api/v1.0/do_fft_from_sample  
    POST - Do an FFT analysis with raw sample data sent to the server as post
 
-**2. Client API - With the following Hooks**
+**2. Client API - With the following Hooks**  
 _For instructions on how to use these methods please look at the documented code in getFFT.py. The simple HTTP requests and some drawing methods in getFFT.py are for illustration purposes. Feel free to rewrite these in any environment that may be relevant. It should be very easy to port._
 
 1. getwaves  
