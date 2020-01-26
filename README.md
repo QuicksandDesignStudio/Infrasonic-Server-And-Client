@@ -4,7 +4,8 @@ This Repo has three components
 
 # 1. Flask Server - With the Following API Hooks
 
-_For instructions on how to use these methods please look at the documented code in app.py_
+_For instructions on how to use these methods please look at the documented code in app.py_  
+_Please note that the flask server dependencies are not included in the repo. The best way to handle this is to create a virutal environment (python3), install the dependencies with pip (look at the includes in app.py to figure what needs to the installed) and then use app.py_
 
 1. /fft/api/v1.0/make_wave  
    POST - Make a wave (.wav) from raw sound sensor (mic) samples
