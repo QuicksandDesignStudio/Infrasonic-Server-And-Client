@@ -11,7 +11,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-Copyright (c) 2020 Romit Raj - Added API hooks : make_wave, get_wave, do_fft, do_fft_from_sample - Refer to the functions for more details
+Copyright (c) 2020 Romit Raj
 Copyright (c) 2020 Thejesh GN 
 """
 
