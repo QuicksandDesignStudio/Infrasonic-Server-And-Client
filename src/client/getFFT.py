@@ -12,7 +12,7 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 Copyright (c) 2020 Romit Raj
-Copyright (c) 2020 Thejesh GN 
+Copyright (c) 2020 Thejesh GN
 """
 
 from os import listdir
@@ -25,7 +25,7 @@ import time
 from matplotlib import pyplot as plt
 
 samplePath = "samples"
-analogSampleRate = '1950'
+analogSampleRate = '1915'
 API_ENDPOINT_MAKEWAV = "http://localhost:5000/fft/api/v1.0/make_wave"
 API_ENDPOINT_GETWAV = "http://localhost:5000/fft/api/v1.0/get_wave"
 API_ENDPOINT_DOFFT = "http://localhost:5000/fft/api/v1.0/do_fft"
@@ -61,7 +61,9 @@ def main():
 
         elif(sys.argv[1] == "getFFTsample"):
             f = open("samples/"+sys.argv[2])
-            payload = {'sampling_rate': analogSampleRate, 'samples': f.read()}
+            sampleDetails = json.loads(f.read())
+            payload = {
+                'sampling_rate': sampleDetails["sampleCount"], 'samples': getStringFromIntArray(sampleDetails["data"])}
             r = requests.post(url=API_ENDPOINT_DOFFTSAMPLE,
                               data=json.dumps(payload))
             returnLoad = json.loads(r.text)
@@ -69,8 +71,9 @@ def main():
 
         elif(sys.argv[1] == "makewave"):
             f = open("samples/"+sys.argv[2])
+            sampleDetails = json.loads(f.read())
             payload = {'file_name': sys.argv[3],
-                       'sampling_rate': analogSampleRate, 'samples': f.read()}
+                       'sampling_rate': sampleDetails["sampleCount"], 'samples': getStringFromIntArray(sampleDetails["data"])}
             r = requests.post(url=API_ENDPOINT_MAKEWAV,
                               data=json.dumps(payload))
             print(r.text)
@@ -101,6 +104,13 @@ def main():
             r = requests.get(url=API_ENDPOINT_ESP_GETALLSAMPLES)
             allsamples = json.loads(r.text)
             deleteallsamples(allsamples)
+
+
+def getStringFromIntArray(intArray):
+    returnString = ""
+    for i in intArray:
+        returnString += str(i) + ","
+    return returnString[:-1]
 
 
 def plotfft(fftdata):
@@ -144,7 +154,18 @@ def plotfft(fftdata):
 def saveallsamples(allsamples):
     for entry in allsamples:
         r = requests.get(url=API_ENDPOINT_ESP+entry["name"])
-        returnLoad = r.text
+        returnLoad = json.loads(r.text)
+        durationInSeconds = (
+            int(returnLoad["end"][0]) - int(returnLoad["start"][0]))/1000000
+        # subtracting one for FFT safety
+        sampleRate = int(len(returnLoad["data"]) / durationInSeconds) - 1
+        writeLoad = {'sampleCount': sampleRate, 'data': returnLoad["data"]}
+        fileName = "samples/" + entry["name"] + ".txt"
+        with open(fileName, 'w') as f:
+            print(fileName)
+            f.write(json.dumps(writeLoad))
+
+        """
         sample = returnLoad[:-1]
         fileName = "samples/" + entry["name"] + ".txt"
         sampleBroken = sample.split(",")
@@ -160,6 +181,7 @@ def saveallsamples(allsamples):
         with open(fileName, 'w') as f:
             print(fileName)
             f.write(filteredSample)
+        """
         """
         returnload = json.loads(r.text)
         sample = returnload["data"]
